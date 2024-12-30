@@ -1,7 +1,7 @@
 package br.com.backendjava.springboot.model.embeddables;
 
-import jakarta.persistence.Embeddable;
-import jakarta.validation.constraints.NotNull;
+import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
 public class EnderecoEmbeddable {
