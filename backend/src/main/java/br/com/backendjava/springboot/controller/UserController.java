@@ -63,7 +63,6 @@ public class UserController {
         finally {
             // Fecha a sessão
             session.close();
-            HibernateUtil.shutdown();
         }
     }
 
@@ -102,7 +101,6 @@ public class UserController {
         } finally {
             // Fecha a sessão
             session.close();
-            HibernateUtil.shutdown();
         }
             
     }
