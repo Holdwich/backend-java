@@ -7,6 +7,7 @@ import br.com.backendjava.springboot.model.UserModel;
 
 import org.hibernate.Session;
 import org.springframework.http.HttpStatus;
+import org.hibernate.query.Query;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,9 +41,6 @@ public class UserController {
                 .setParameter("username", username)
                 .setParameter("password", encryptedPassword)
                 .uniqueResult();
-
-            // Commita a transação
-            session.getTransaction().commit();
 
             // Se achar...
             if (user != null) {
