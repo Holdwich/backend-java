@@ -2,6 +2,7 @@ package br.com.backendjava.springboot.controller;
 
 import br.com.backendjava.springboot.HibernateUtil;
 import br.com.backendjava.springboot.service.EncryptionService;
+import br.com.backendjava.springboot.service.JwtService;
 import br.com.backendjava.springboot.model.UserModel;
 
 import org.hibernate.Session;
@@ -17,9 +18,11 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/user")
 public class UserController {
 
+    private JwtService jwtService;
+
     // Rota para login
     @GetMapping("/login")
-    public UserModel login(@RequestParam String username, @RequestParam String password) {
+    public String login(@RequestParam String username, @RequestParam String password) {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         UserModel user = null;
@@ -43,8 +46,8 @@ public class UserController {
 
             // Se achar...
             if (user != null) {
-                // Retorna o usuário
-                return user;
+                // Retorna o token de autorização
+                return jwtService.generateToken(user.getUsername(), user.getIsAdmin());
             } else {
                 // Se não achar, retorna null
                 return null;
