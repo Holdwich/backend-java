@@ -21,26 +21,32 @@ public class DataSeeder {
 
         try{
 
-            // User Admin
+            long userCount = (long) session.createQuery("SELECT COUNT(u) FROM UserModel u").uniqueResult();
 
-            UserModel userAdmin = new UserModel();
+            if (userCount == 0) {
 
-            userAdmin.setUsername("admin");
-            userAdmin.setPassword(EncryptionService.encrypt("123qwe!@#"));
-            userAdmin.setIsAdmin(true);
+                // User Admin
 
-            // User Client
+                UserModel userAdmin = new UserModel();
 
-            UserModel userClient = new UserModel();
+                userAdmin.setUsername("admin");
+                userAdmin.setPassword(EncryptionService.encrypt("123qwe!@#"));
+                userAdmin.setIsAdmin(true);
 
-            userClient.setUsername("user");
-            userClient.setPassword(EncryptionService.encrypt("123qwe123"));
-            userClient.setIsAdmin(false);
+                // User Client
 
-            session.beginTransaction();
+                UserModel userClient = new UserModel();
 
-            session.persist(userAdmin);
-            session.persist(userClient);
+                userClient.setUsername("user");
+                userClient.setPassword(EncryptionService.encrypt("123qwe123"));
+                userClient.setIsAdmin(false);
+
+                session.beginTransaction();
+
+                session.persist(userAdmin);
+                session.persist(userClient);
+
+            }
 
             session.getTransaction().commit();
         
@@ -49,7 +55,6 @@ public class DataSeeder {
             e.printStackTrace();
         } finally {
             session.close();
-            HibernateUtil.shutdown();
         }
     }
 }

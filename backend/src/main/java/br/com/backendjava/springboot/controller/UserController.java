@@ -36,7 +36,7 @@ public class UserController {
             session.beginTransaction();
 
             // Query para achar o usuário no banco de dados
-            user = session.createQuery("FROM usuarios WHERE username = :username AND password = :password", UserModel.class)
+            user = session.createQuery("FROM UserModel WHERE username = :username AND password = :password", UserModel.class)
                 .setParameter("username", username)
                 .setParameter("password", encryptedPassword)
                 .uniqueResult();
