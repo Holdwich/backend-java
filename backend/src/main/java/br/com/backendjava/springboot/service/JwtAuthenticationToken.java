@@ -5,6 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
+// Token personalizado
+
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     private final String username;

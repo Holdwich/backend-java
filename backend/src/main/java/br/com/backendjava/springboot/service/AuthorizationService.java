@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthorizationService {
+
+    // Checa a propriedade "IsAdmin" do token
+
     public boolean isAdmin(Authentication authentication) {
         if (authentication instanceof JwtAuthenticationToken) {
             JwtAuthenticationToken jwtAuthToken = (JwtAuthenticationToken) authentication;

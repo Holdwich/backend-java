@@ -20,15 +20,27 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
 
+        // Variáveis
+
         String username = null;
         String jwt = null;
 
+        // Se possui header...
+
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+
+            // pega o JWT e extrai o usuário
+
             jwt = authorizationHeader.substring(7);
             username = jwtService.extractUsername(jwt);
         }
 
+        // Se o usuário não é nulo...
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            // Extrai a propriedade "IsAdmin" e monta um token no back para a utilização
+
             Boolean isAdmin = jwtService.extractIsAdmin(jwt);
 
             JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(username, isAdmin, null);
@@ -36,6 +48,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
+
+        // Executa
+
         chain.doFilter(request, response);
     }
 }
