@@ -68,8 +68,8 @@ public class UserController {
     }
 
     // Rota para registro
-    @PostMapping("/registro")
-    public UserModel registrar(@RequestParam String username, @RequestParam String password) {
+    @PostMapping("/register")
+    public UserModel register(@RequestParam String username, @RequestParam String password) {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         UserModel user = new UserModel();
