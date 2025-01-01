@@ -199,7 +199,6 @@ public class ClientController {
                 phoneModel.setTipo(phone.get("tipo").asText());
                 phoneModel.setTelefone(phone.get("telefone").asText());
                 phoneModel.setCliente(client);
-                session.save(phoneModel);
                 return phoneModel;
             }).collect(Collectors.toList());
 
@@ -209,7 +208,6 @@ public class ClientController {
                 EmailModel emailModel = new EmailModel();
                 emailModel.setEmail(email.get("email").asText());
                 emailModel.setCliente(client);
-                session.save(emailModel);
                 return emailModel;
             }).collect(Collectors.toList());
             
@@ -249,12 +247,19 @@ public class ClientController {
                 client.getEndereco().setComplemento(complemento);
             }
 
+            // Salvando cliente no banco de dados
+            session.save(client);
+
+            // Salvando telefones e emails no banco de dados
+            telefones.forEach(phone -> session.save(phone));
+            emails.forEach(email -> session.save(email));
+
+
             // Adiciona telefones e emails
             client.setTelefones(telefones);
             client.setEmails(emails);
 
-            // Salvando no banco de dados
-            session.save(client);
+            
 
             // Commitando a transação
             session.getTransaction().commit();
