@@ -8,6 +8,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -31,9 +34,11 @@ public class ClientModel {
     // -- Relacionamentos --
 
     @OneToMany(mappedBy = "cliente")
+    @JsonManagedReference
     private List<PhoneModel> telefones = new ArrayList<>();
 
     @OneToMany(mappedBy = "cliente")
+    @JsonManagedReference
     private List<EmailModel> emails = new ArrayList<>();
 
     // -- Getters e Setters --

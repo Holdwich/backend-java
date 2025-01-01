@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "Emails")
 public class EmailModel {
@@ -20,6 +22,7 @@ public class EmailModel {
 
     @ManyToOne
     @JoinColumn(name = "cpf", nullable = false)
+    @JsonBackReference
     private ClientModel cliente;
 
     private String email;

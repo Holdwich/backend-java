@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import br.com.backendjava.springboot.HibernateUtil;
@@ -56,6 +58,10 @@ public class ClientController {
             if (clients != null) {
 
                 for (ClientModel client : clients) {
+
+                    // Inicializando os telefones e emails
+                    Hibernate.initialize(client.getTelefones());
+                    Hibernate.initialize(client.getEmails());
 
                     // CPF
                     String cpfString = client.getCpf();
@@ -104,11 +110,14 @@ public class ClientController {
 
     // Rota para pegar um cliente específico pelo ID
     @GetMapping("/get")
-    public ClientModel getClientById(@RequestParam(required = true) Integer cpf) {
+    public ClientModel getClientById(@RequestParam(required = true) String cpf) {
         
         Session session = HibernateUtil.getSessionFactory().openSession();
         Query query = null;
         ClientModel client = null;
+
+        // Formatação do CPF (removendo caracteres especiais)
+        cpf = cpf.replaceAll("[^0-9]", "");
             
         try {
 
@@ -120,6 +129,11 @@ public class ClientController {
                 .setParameter("cpf", cpf);
 
             client = (ClientModel) query.getSingleResult();
+
+
+            // Inicializando os telefones e emails
+            Hibernate.initialize(client.getTelefones());
+            Hibernate.initialize(client.getEmails());
 
             // Colocando as máscaras para exibição nos campos de CPF, CEP e Telefone
 
@@ -259,8 +273,6 @@ public class ClientController {
             client.setTelefones(telefones);
             client.setEmails(emails);
 
-            
-
             // Commitando a transação
             session.getTransaction().commit();
 
@@ -278,6 +290,47 @@ public class ClientController {
         }
 
     }
-    
+
+    @DeleteMapping("/delete")
+    public HttpStatus deleteClient(@RequestParam(required = true) String cpf) {
+        
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Query query = null;
+        ClientModel client = null;
+
+        // Formatação do CPF (removendo caracteres especiais)
+        cpf = cpf.replaceAll("[^0-9]", "");
+            
+        try {
+
+            // Iniciando a transação
+            session.beginTransaction();
+
+            // Query para pegar o cliente pelo CPF
+            query = session.createQuery("FROM ClientModel WHERE cpf = :cpf", ClientModel.class)
+                .setParameter("cpf", cpf);
+
+            client = (ClientModel) query.getSingleResult();
+
+            // Deletando cliente
+            session.delete(client);
+
+            // Commitando a transação
+
+            session.getTransaction().commit();
+
+            return HttpStatus.OK;
+        } 
+        catch (Exception e){
+            if (session.getTransaction() != null) session.getTransaction().rollback();
+            e.printStackTrace();
+
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno do servidor durante a requisição.");
+        }
+        finally {
+            // Fecha a sessão
+            session.close();
+        }
+    }
 }
 

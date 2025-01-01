@@ -2,6 +2,9 @@ package br.com.backendjava.springboot.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +23,7 @@ public class PhoneModel {
 
     @ManyToOne
     @JoinColumn(name = "cpf", nullable = false)
+    @JsonBackReference
     private ClientModel cliente;
 
     private String tipo;
