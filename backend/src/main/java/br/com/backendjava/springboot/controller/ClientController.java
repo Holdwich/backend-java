@@ -312,6 +312,14 @@ public class ClientController {
 
             client = (ClientModel) query.getSingleResult();
 
+            // Deletando telefones e emails associados
+            for (PhoneModel phone : client.getTelefones()) {
+                session.delete(phone);
+            }
+            for (EmailModel email : client.getEmails()) {
+                session.delete(email);
+            }
+
             // Deletando cliente
             session.delete(client);
 
