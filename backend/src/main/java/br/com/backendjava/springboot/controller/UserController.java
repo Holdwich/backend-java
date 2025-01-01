@@ -51,8 +51,6 @@ public class UserController {
 
             count = (long) query.getSingleResult();
 
-            System.out.println(count);
-
             // Se achar...
             if (count > 0) {
                 // Busca coluna isAdmin do usuário
@@ -60,8 +58,6 @@ public class UserController {
                     .setParameter("username", username);
 
                 isAdmin = (boolean) query.getSingleResult();
-
-                System.out.println(isAdmin);
 
                 // Monta o token
 
