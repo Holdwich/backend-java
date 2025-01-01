@@ -28,8 +28,8 @@ public class SecurityConfig{
         http
             .authorizeRequests()
             .antMatchers("/user/**").permitAll()
-            .antMatchers("/client/rota-restrita-aqui").access("@authorizationService.isAdmin(authentication)")
-            .anyRequest().permitAll()
+            .antMatchers("/client/get").authenticated()
+            .anyRequest().access("@authorizationService.isAdmin(authentication)")
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
