@@ -50,7 +50,7 @@ public class EnderecoEmbeddable {
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Accept", "application/json");
 
-                // Se código 200, pega os dados (útil para a máscara de CEP)
+                // Se código 200, pega os dados (somente se o método for chamado com o CEP formatado sem máscara)
                 if (conn.getResponseCode() == 200) {
                     BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
                     StringBuilder sb = new StringBuilder();

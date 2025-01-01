@@ -23,9 +23,9 @@ public class UserController {
     @Autowired
     private JwtService jwtService;
 
-    // Rota para login
+    // Rota para login (REFATORAR: DE REQUESTPARAM PARA REQUESTBODY)
     @GetMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password) {
+    public String login(@RequestParam String username, @RequestParam String senha) {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         Query query = null;
@@ -39,15 +39,15 @@ public class UserController {
         try {
 
             //Criptografando senha para comparar com a senha no banco de dados
-            String encryptedPassword = EncryptionService.encrypt(password);
+            String encryptedPassword = EncryptionService.encrypt(senha);
 
             // Iniciando a transação
             session.beginTransaction();
 
             // Query para achar o usuário no banco de dados
-            query = session.createQuery("SELECT COUNT(*) FROM UserModel WHERE username = :username AND password = :password")
+            query = session.createQuery("SELECT COUNT(*) FROM UserModel WHERE username = :username AND password = :senha")
                 .setParameter("username", username)
-                .setParameter("password", encryptedPassword);
+                .setParameter("senha", encryptedPassword);
 
             count = (long) query.getSingleResult();
 
