@@ -199,6 +199,7 @@ public class ClientController {
                 phoneModel.setTipo(phone.get("tipo").asText());
                 phoneModel.setTelefone(phone.get("telefone").asText());
                 phoneModel.setCliente(client);
+                session.save(phoneModel);
                 return phoneModel;
             }).collect(Collectors.toList());
 
@@ -208,6 +209,7 @@ public class ClientController {
                 EmailModel emailModel = new EmailModel();
                 emailModel.setEmail(email.get("email").asText());
                 emailModel.setCliente(client);
+                session.save(emailModel);
                 return emailModel;
             }).collect(Collectors.toList());
             
@@ -247,6 +249,7 @@ public class ClientController {
                 client.getEndereco().setComplemento(complemento);
             }
 
+            // Adiciona telefones e emails
             client.setTelefones(telefones);
             client.setEmails(emails);
 
