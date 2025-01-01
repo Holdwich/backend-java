@@ -19,7 +19,7 @@ public class ClientModel {
 
     @Id
     @NotBlank
-    private Integer cpf;
+    private String cpf;
 
     @NotBlank
     @Size(max = 100)
@@ -38,11 +38,11 @@ public class ClientModel {
 
     // -- Getters e Setters --
 
-    public Integer getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(Integer cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 

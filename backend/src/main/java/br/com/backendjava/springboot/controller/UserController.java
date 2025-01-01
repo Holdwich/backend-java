@@ -3,7 +3,6 @@ package br.com.backendjava.springboot.controller;
 import br.com.backendjava.springboot.HibernateUtil;
 import br.com.backendjava.springboot.service.EncryptionService;
 import br.com.backendjava.springboot.service.JwtService;
-import br.com.backendjava.springboot.model.UserModel;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;

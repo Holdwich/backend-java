@@ -23,7 +23,7 @@ public class PhoneModel {
     private ClientModel cliente;
 
     private String tipo;
-    private Integer telefone;
+    private String telefone;
 
     // -- Getters e Setters --
 
@@ -51,11 +51,11 @@ public class PhoneModel {
         this.tipo = tipo;
     }
 
-    public Integer getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(Integer telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
     
