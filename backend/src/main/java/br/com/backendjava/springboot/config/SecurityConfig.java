@@ -33,6 +33,8 @@ public class SecurityConfig{
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
+            .cors()
+            .and()
             .csrf().disable();
             
 

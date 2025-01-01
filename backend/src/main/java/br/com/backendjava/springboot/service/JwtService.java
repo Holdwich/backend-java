@@ -7,6 +7,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 import java.util.function.Function;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class JwtService {
 
     private String SECRET_KEY = "ChaveSecretaAqui"; // Em produção, colocar no .env

@@ -6,19 +6,22 @@ import br.com.backendjava.springboot.service.JwtService;
 import br.com.backendjava.springboot.model.UserModel;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.hibernate.query.Query;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
+@EnableAutoConfiguration
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
     private JwtService jwtService;
 
     // Rota para login
@@ -26,7 +29,13 @@ public class UserController {
     public String login(@RequestParam String username, @RequestParam String password) {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
-        UserModel user = null;
+        Query query = null;
+        boolean isAdmin = false;
+        long count = 0;
+
+        /******************************************************************************************************************
+         * * OBS: Não utilizei o objeto diretamente por conta de um erro de typeCast cujo não consegui resolver a tempo * *
+         ******************************************************************************************************************/
 
         try {
 
@@ -37,15 +46,30 @@ public class UserController {
             session.beginTransaction();
 
             // Query para achar o usuário no banco de dados
-            user = session.createQuery("FROM UserModel WHERE username = :username AND password = :password", UserModel.class)
+            query = session.createQuery("SELECT COUNT(*) FROM UserModel WHERE username = :username AND password = :password")
                 .setParameter("username", username)
-                .setParameter("password", encryptedPassword)
-                .uniqueResult();
+                .setParameter("password", encryptedPassword);
+
+            count = (long) query.getSingleResult();
+
+            System.out.println(count);
 
             // Se achar...
-            if (user != null) {
+            if (count > 0) {
+                // Busca coluna isAdmin do usuário
+                query = session.createQuery("SELECT isAdmin FROM UserModel WHERE username = :username")
+                    .setParameter("username", username);
+
+                isAdmin = (boolean) query.getSingleResult();
+
+                System.out.println(isAdmin);
+
+                // Monta o token
+
+                String token = jwtService.generateToken(username, isAdmin);
+
                 // Retorna o token de autorização
-                return jwtService.generateToken(user.getUsername(), user.getIsAdmin());
+                return "{\"token\": \"" + token + "\"}";
             } else {
                 // Se não achar, retorna null
                 return null;
@@ -62,44 +86,5 @@ public class UserController {
             // Fecha a sessão
             session.close();
         }
-    }
-
-    // Rota para registro
-    @PostMapping("/register")
-    public UserModel register(@RequestParam String username, @RequestParam String password) {
-
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        UserModel user = new UserModel();
-
-        try {
-
-            //Criptografando senha para salvar no banco de dados
-            String encryptedPassword = EncryptionService.encrypt(password);
-
-            // Iniciando a transação
-            session.beginTransaction();
-
-            // Setando os valores do usuário
-            user.setUsername(username);
-            user.setPassword(encryptedPassword);
-
-            // Salvando o usuário no banco de dados
-            session.persist(user);
-
-            // Commita a transação e retorna o usuário
-            session.getTransaction().commit();
-
-            return user;
-
-        } catch (Exception e) {
-            if (session.getTransaction() != null) session.getTransaction().rollback();
-            e.printStackTrace();
-
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno do servidor durante a requisição.");
-        } finally {
-            // Fecha a sessão
-            session.close();
-        }
-            
     }
 }

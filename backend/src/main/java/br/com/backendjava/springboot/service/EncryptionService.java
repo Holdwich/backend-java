@@ -2,8 +2,12 @@ package br.com.backendjava.springboot.service;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+
+import org.springframework.stereotype.Service;
+
 import java.util.Base64;
 
+@Service
 public class EncryptionService {
 
     private static final String ALGORITHM = "AES";
