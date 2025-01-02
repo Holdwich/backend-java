@@ -338,6 +338,7 @@ public class ClientController {
 
     }
 
+    // Rota para deletar um cliente
     @DeleteMapping("/delete")
     public HttpStatus deleteClient(@RequestParam(required = true) String cpf) {
         
@@ -388,8 +389,10 @@ public class ClientController {
         }
     }
 
+    // Rota para deletar um email
     @DeleteMapping("/delete/email")
     public HttpStatus deleteEmail(@RequestBody ObjectNode objectNode) {
+
         Session session = HibernateUtil.getSessionFactory().openSession();
         Query query = null;
         long count = 0;
@@ -425,6 +428,7 @@ public class ClientController {
 
             count = (long) query.getSingleResult();
 
+            // Se não tiver mais de 1 email cadastrado, não é possível deletar
             if (count <= 1) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possível deletar o email (O cliente não tem, ou tem apenas um email cadastrado).");
             }
@@ -456,8 +460,10 @@ public class ClientController {
         }
     }
     
+    // Rota para deletar um telefone
     @DeleteMapping("/delete/phone")
     public HttpStatus deletePhone(@RequestBody ObjectNode objectNode) {
+
         Session session = HibernateUtil.getSessionFactory().openSession();
         Query query = null;
         long count = 0;
@@ -494,6 +500,7 @@ public class ClientController {
 
             count = (long) query.getSingleResult();
 
+            // Se não tiver mais de um telefone, não é possível deletar
             if (count <= 1) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possível deletar o telefone (O cliente não tem, ou tem apenas um telefone cadastrado).");
             }
