@@ -338,6 +338,137 @@ public class ClientController {
 
     }
 
+    // Rota para registrar um email
+    @PostMapping("/register/email")
+    public EmailModel registerEmail(@RequestBody ObjectNode objectNode) {
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        EmailModel email = new EmailModel();
+        ClientModel client = null;
+
+        String cpf = null;
+        String emailAddress = null;
+
+        // Pega os valores do JSON
+        if (objectNode.has("cpf")) {
+            cpf = objectNode.get("cpf").asText();
+        }
+
+        if (objectNode.has("email")) {
+            emailAddress = objectNode.get("email").asText();
+        }
+
+        // Verifica se CPF ou email estão vazios ou nulos
+        if (cpf == null || cpf.trim().isEmpty() || emailAddress == null || emailAddress.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parâmetros insuficientes: CPF ou email não podem ser vazios.");
+        }
+
+        // Formatação do CPF (removendo caracteres especiais)
+        cpf = cpf.replaceAll("[^0-9]", "");
+
+        try {
+            // Iniciando a transação
+            session.beginTransaction();
+
+            // Query para pegar o cliente pelo CPF
+            Query query = session.createQuery("FROM ClientModel WHERE cpf = :cpf", ClientModel.class)
+                .setParameter("cpf", cpf);
+
+            client = (ClientModel) query.getSingleResult();
+
+            // Setando os valores
+            email.setEmail(emailAddress);
+            email.setCliente(client);
+
+            // Salvando email no banco de dados
+            session.save(email);
+
+            // Commitando a transação
+            session.getTransaction().commit();
+
+            return email;
+        } 
+        catch (Exception e) {
+            if (session.getTransaction() != null) session.getTransaction().rollback();
+            e.printStackTrace();
+
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno do servidor durante a requisição.");
+        } 
+        finally {
+            // Fecha a sessão
+            session.close();
+        }
+    }
+
+    // Rota para registrar um telefone
+    @PostMapping("/register/phone")
+    public PhoneModel registerPhone(@RequestBody ObjectNode objectNode) {
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        PhoneModel phone = new PhoneModel();
+        ClientModel client = null;
+
+        String cpf = null;
+        String phoneNumber = null;
+        String phoneType = null;
+
+        // Pega os valores do JSON
+        if (objectNode.has("cpf")) {
+            cpf = objectNode.get("cpf").asText();
+        }
+
+        if (objectNode.has("telefone")) {
+            phoneNumber = objectNode.get("telefone").asText();
+        }
+
+        if (objectNode.has("tipo")) {
+            phoneType = objectNode.get("tipo").asText();
+        }
+
+        // Verifica se CPF, telefone ou tipo estão vazios ou nulos
+        if (cpf == null || cpf.trim().isEmpty() || phoneNumber == null || phoneNumber.trim().isEmpty() || phoneType == null || phoneType.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parâmetros insuficientes: CPF, telefone ou tipo não podem ser vazios.");
+        }
+
+        // Formatação do CPF e telefone (removendo caracteres especiais)
+        cpf = cpf.replaceAll("[^0-9]", "");
+        phoneNumber = phoneNumber.replaceAll("[^0-9]", "");
+
+        try {
+            // Iniciando a transação
+            session.beginTransaction();
+
+            // Query para pegar o cliente pelo CPF
+            Query query = session.createQuery("FROM ClientModel WHERE cpf = :cpf", ClientModel.class)
+                .setParameter("cpf", cpf);
+
+            client = (ClientModel) query.getSingleResult();
+
+            // Setando os valores
+            phone.setTelefone(phoneNumber);
+            phone.setTipo(phoneType);
+            phone.setCliente(client);
+
+            // Salvando telefone no banco de dados
+            session.save(phone);
+
+            // Commitando a transação
+            session.getTransaction().commit();
+
+            return phone;
+        } 
+        catch (Exception e) {
+            if (session.getTransaction() != null) session.getTransaction().rollback();
+            e.printStackTrace();
+
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno do servidor durante a requisição.");
+        } 
+        finally {
+            // Fecha a sessão
+            session.close();
+        }
+    }
+
     // Rota para deletar um cliente
     @DeleteMapping("/delete")
     public HttpStatus deleteClient(@RequestParam(required = true) String cpf) {
@@ -390,7 +521,7 @@ public class ClientController {
     }
 
     // Rota para deletar um email
-    @DeleteMapping("/delete/email")
+    @PostMapping("/delete/email")
     public HttpStatus deleteEmail(@RequestBody ObjectNode objectNode) {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -461,7 +592,7 @@ public class ClientController {
     }
     
     // Rota para deletar um telefone
-    @DeleteMapping("/delete/phone")
+    @PostMapping("/delete/phone")
     public HttpStatus deletePhone(@RequestBody ObjectNode objectNode) {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
