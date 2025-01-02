@@ -193,18 +193,50 @@ public class ClientController {
         ClientModel client = new ClientModel();
         EnderecoEmbeddable endereco = new EnderecoEmbeddable();
 
+        String cpf = null;
+        String nome = null;
+        String cep = null;
+        String logradouro = null;
+        String bairro = null;
+        String cidade = null;
+        String uf = null;
+        String complemento = null;
+
         client.setEndereco(endereco);
 
         // Pega os valores do JSON
 
-        String cpf = objectNode.get("cpf").asText();
-        String nome = objectNode.get("nome").asText();
-        String cep = objectNode.get("cep").asText();
-        String logradouro = objectNode.get("logradouro") != null ? objectNode.get("logradouro").asText() : null;
-        String bairro = objectNode.get("bairro") != null ? objectNode.get("bairro").asText() : null;
-        String cidade = objectNode.get("cidade") != null ? objectNode.get("cidade").asText() : null;
-        String uf = objectNode.get("uf") != null ? objectNode.get("uf").asText() : null;
-        String complemento = objectNode.get("complemento") != null ? objectNode.get("complemento").asText() : null;
+        if(objectNode.has("cpf")){
+            cpf = objectNode.get("cpf").asText();
+        }
+
+        if(objectNode.has("nome")){
+            nome = objectNode.get("nome").asText();
+        }
+
+        if(objectNode.has("cep")){
+            cep = objectNode.get("cep").asText();
+        }
+
+        if(objectNode.has("logradouro")){
+            logradouro = objectNode.get("logradouro").asText();
+        }
+
+        if(objectNode.has("bairro")){
+            bairro = objectNode.get("bairro").asText();
+        }
+
+        if(objectNode.has("cidade")){
+            cidade = objectNode.get("cidade").asText();
+        }
+
+        if(objectNode.has("uf")){
+            uf = objectNode.get("uf").asText();
+        }
+
+        if(objectNode.has("complemento")){
+            complemento = objectNode.get("complemento").asText();
+        }
 
         // Verifica se CPF, Nome ou CEP estão vazios ou nulos
         if (cpf == null || cpf.trim().isEmpty() || nome == null || nome.trim().isEmpty() || cep == null || cep.trim().isEmpty()) {

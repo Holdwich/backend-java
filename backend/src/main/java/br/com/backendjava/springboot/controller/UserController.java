@@ -12,7 +12,7 @@ import org.hibernate.query.Query;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -32,10 +32,17 @@ public class UserController {
         Query query = null;
         boolean isAdmin = false;
         long count = 0;
+        String username = null;
+        String senha = null;
 
         // Extraindo os valores de username e senha do ObjectNode
-        String username = objectNode.get("username").asText();
-        String senha = objectNode.get("senha").asText();
+        if (objectNode.has("username")){
+            username = objectNode.get("username").asText();
+        }
+
+        if (objectNode.has("senha")){
+            senha = objectNode.get("senha").asText();
+        }
 
         // Checando se os valores foram passados ou não
         if (username == null || username.trim().isEmpty() || senha == null || senha.trim().isEmpty()) {
@@ -70,14 +77,13 @@ public class UserController {
                 isAdmin = (boolean) query.getSingleResult();
 
                 // Monta o token
-
                 String token = jwtService.generateToken(username, isAdmin);
 
                 // Retorna o token de autorização
                 return "{\"token\": \"" + token + "\"}";
             } else {
-                // Se não achar, retorna null
-                return null;
+                // Se não achar, retorna mensagem
+                return "{\"message\": \"Usuário ou senha inválidos.\"}";
             }
             
         }
