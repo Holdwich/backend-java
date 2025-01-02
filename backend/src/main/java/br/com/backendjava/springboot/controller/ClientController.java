@@ -261,10 +261,19 @@ public class ClientController {
         // Converte JSON de emails para List<EmailModel>
         List<EmailModel> emails = StreamSupport.stream(objectNode.get("emails").spliterator(), false)
             .map(email -> {
-                EmailModel emailModel = new EmailModel();
-                emailModel.setEmail(email.get("email").asText());
-                emailModel.setCliente(client);
-                return emailModel;
+
+            // Verifica se o email é válido
+            
+            String emailAddress = email.get("email").asText();
+            if (!emailAddress.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email inválido: " + emailAddress);
+            }
+
+
+            EmailModel emailModel = new EmailModel();
+            emailModel.setEmail(emailAddress);
+            emailModel.setCliente(client);
+            return emailModel;
             }).collect(Collectors.toList());
 
         // Verifica se a lista de emails está vazia
@@ -361,6 +370,11 @@ public class ClientController {
         // Verifica se CPF ou email estão vazios ou nulos
         if (cpf == null || cpf.trim().isEmpty() || emailAddress == null || emailAddress.trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parâmetros insuficientes: CPF ou email não podem ser vazios.");
+        }
+
+        // Verifica se o email é válido
+        if (!emailAddress.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email inválido: " + emailAddress);
         }
 
         // Formatação do CPF (removendo caracteres especiais)
