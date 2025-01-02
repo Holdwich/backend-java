@@ -3,6 +3,14 @@ package br.com.backendjava.springboot;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+/**
+ * Classe utilitária para configurar e fornecer a fábrica de sessões do Hibernate.
+ *
+ * Esta classe inicializa a fábrica de sessões a partir do arquivo de configuração
+ * hibernate.cfg.xml e fornece métodos para obter a fábrica de sessões e fechar
+ * a conexão com o banco de dados.
+ * 
+ */
 public class HibernateUtil {
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
