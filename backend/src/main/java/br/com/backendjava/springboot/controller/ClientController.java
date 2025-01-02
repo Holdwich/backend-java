@@ -108,7 +108,7 @@ public class ClientController {
         }
     }
 
-    // Rota para pegar um cliente específico pelo ID
+    // Rota para pegar um cliente específico pelo CPF
     @GetMapping("/get")
     public ClientModel getClientById(@RequestParam(required = true) String cpf) {
         
@@ -184,7 +184,7 @@ public class ClientController {
     }
 
     // Rota para cadastrar um cliente
-    @PostMapping("/register")
+    @PostMapping("/register/client")
     public ClientModel registerClient(@RequestBody ObjectNode objectNode) {
 
         // ****** INICIALIZAÇÃO ******
