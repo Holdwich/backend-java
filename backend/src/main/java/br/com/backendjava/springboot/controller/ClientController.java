@@ -206,6 +206,11 @@ public class ClientController {
         String uf = objectNode.get("uf") != null ? objectNode.get("uf").asText() : null;
         String complemento = objectNode.get("complemento") != null ? objectNode.get("complemento").asText() : null;
 
+        // Verifica se CPF, Nome ou CEP estão vazios ou nulos
+        if (cpf == null || cpf.trim().isEmpty() || nome == null || nome.trim().isEmpty() || cep == null || cep.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parâmetros insuficientes: CPF, Nome ou CEP não podem ser vazios.");
+        }
+
         // Converte JSON de telefones para List<PhoneModel>
         List<PhoneModel> telefones = StreamSupport.stream(objectNode.get("telefones").spliterator(), false)
             .map(phone -> {
@@ -216,6 +221,11 @@ public class ClientController {
                 return phoneModel;
             }).collect(Collectors.toList());
 
+        // Verifica se a lista de telefones está vazia
+        if (telefones.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parâmetro insuficiente: Lista de telefones não pode ser vazia.");
+        }
+
         // Converte JSON de emails para List<EmailModel>
         List<EmailModel> emails = StreamSupport.stream(objectNode.get("emails").spliterator(), false)
             .map(email -> {
@@ -224,6 +234,11 @@ public class ClientController {
                 emailModel.setCliente(client);
                 return emailModel;
             }).collect(Collectors.toList());
+
+        // Verifica se a lista de emails está vazia
+        if (emails.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parâmetro insuficiente: Lista de emails não pode ser vazia.");
+        }
             
         try {
 
