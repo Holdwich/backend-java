@@ -26,7 +26,7 @@ import br.com.backendjava.springboot.service.JwtRequestFilter;
  * 
  * Configurações:
  * - Permite todas as requisições para endpoints que começam com "/user/**".
- * - Requer autenticação para o endpoint "/client/get".
+ * - Requer autenticação para o endpoint "/client/get" e "/client/get/all".
  * - Requer que qualquer outra requisição seja acessada apenas por administradores.
  * - Define a política de criação de sessão como STATELESS.
  * - Habilita CORS.
@@ -48,7 +48,7 @@ public class SecurityConfig{
         http
             .authorizeRequests()
             .antMatchers("/user/**").permitAll()
-            .antMatchers("/client/get").authenticated()
+            .antMatchers("/client/get","/client/get/all").authenticated()
             .anyRequest().access("@authorizationService.isAdmin(authentication)")
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
