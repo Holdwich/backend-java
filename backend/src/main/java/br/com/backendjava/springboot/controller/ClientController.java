@@ -387,5 +387,142 @@ public class ClientController {
             session.close();
         }
     }
+
+    @DeleteMapping("/delete/email")
+    public HttpStatus deleteEmail(@RequestBody ObjectNode objectNode) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Query query = null;
+        long count = 0;
+        EmailModel email = null;
+
+        String cpf = null;
+        String emailAddress = null;
+
+        // Pega os valores do JSON
+        if (objectNode.has("cpf")) {
+            cpf = objectNode.get("cpf").asText();
+        }
+
+        if (objectNode.has("email")) {
+            emailAddress = objectNode.get("email").asText();
+        }
+
+        // Verifica se CPF ou email estão vazios ou nulos
+        if (cpf == null || cpf.trim().isEmpty() || emailAddress == null || emailAddress.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parâmetros insuficientes: CPF ou email não podem ser vazios.");
+        }
+
+        // Formatação do CPF (removendo caracteres especiais)
+        cpf = cpf.replaceAll("[^0-9]", "");
+
+        try {
+            // Iniciando a transação
+            session.beginTransaction();
+
+            // Query para contar quantos emails existem no CPF
+            query = session.createQuery("SELECT COUNT(*) FROM EmailModel WHERE cliente.cpf = :cpf", Long.class)
+                .setParameter("cpf", cpf);
+
+            count = (long) query.getSingleResult();
+
+            if (count <= 1) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possível deletar o email (O cliente não tem, ou tem apenas um email cadastrado).");
+            }
+
+            // Query para pegar o email pelo CPF e endereço de email
+            query = session.createQuery("FROM EmailModel WHERE cliente.cpf = :cpf AND email = :email", EmailModel.class)
+                .setParameter("cpf", cpf)
+                .setParameter("email", emailAddress);
+
+            email = (EmailModel) query.getSingleResult();
+
+            // Deletando email
+            session.delete(email);
+
+            // Commitando a transação
+            session.getTransaction().commit();
+
+            return HttpStatus.OK;
+        } 
+        catch (Exception e) {
+            if (session.getTransaction() != null) session.getTransaction().rollback();
+            e.printStackTrace();
+
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno do servidor durante a requisição.");
+        } 
+        finally {
+            // Fecha a sessão
+            session.close();
+        }
+    }
+    
+    @DeleteMapping("/delete/phone")
+    public HttpStatus deletePhone(@RequestBody ObjectNode objectNode) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Query query = null;
+        long count = 0;
+        PhoneModel phone = null;
+
+        String cpf = null;
+        String phoneNumber = null;
+
+        // Pega os valores do JSON
+        if (objectNode.has("cpf")) {
+            cpf = objectNode.get("cpf").asText();
+        }
+
+        if (objectNode.has("telefone")) {
+            phoneNumber = objectNode.get("telefone").asText();
+        }
+
+        // Verifica se CPF ou telefone estão vazios ou nulos
+        if (cpf == null || cpf.trim().isEmpty() || phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parâmetros insuficientes: CPF ou telefone não podem ser vazios.");
+        }
+
+        // Formatação do CPF e telefone (removendo caracteres especiais)
+        cpf = cpf.replaceAll("[^0-9]", "");
+        phoneNumber = phoneNumber.replaceAll("[^0-9]", "");
+
+        try {
+            // Iniciando a transação
+            session.beginTransaction();
+
+            // Query para contar quantos telefones existem no CPF
+            query = session.createQuery("SELECT COUNT(*) FROM PhoneModel WHERE cliente.cpf = :cpf", Long.class)
+                .setParameter("cpf", cpf);
+
+            count = (long) query.getSingleResult();
+
+            if (count <= 1) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possível deletar o telefone (O cliente não tem, ou tem apenas um telefone cadastrado).");
+            }
+
+            // Query para pegar o telefone pelo CPF e número de telefone
+            query = session.createQuery("FROM PhoneModel WHERE cliente.cpf = :cpf AND telefone = :telefone", PhoneModel.class)
+                .setParameter("cpf", cpf)
+                .setParameter("telefone", phoneNumber);
+
+            phone = (PhoneModel) query.getSingleResult();
+
+            // Deletando telefone
+            session.delete(phone);
+
+            // Commitando a transação
+            session.getTransaction().commit();
+
+            return HttpStatus.OK;
+        } 
+        catch (Exception e) {
+            if (session.getTransaction() != null) session.getTransaction().rollback();
+            e.printStackTrace();
+
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno do servidor durante a requisição.");
+        } 
+        finally {
+            // Fecha a sessão
+            session.close();
+        }
+    }
 }
 
