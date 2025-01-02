@@ -11,6 +11,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 
+/**
+ * Classe que representa o modelo de telefone.
+ * 
+ * Atributos:
+ * - id: Identificador único do telefone.
+ * - cliente: Cliente associado ao telefone.
+ * - tipo: Tipo do telefone (ex: celular, residencial).
+ * - telefone: Número do telefone.
+ * 
+ * Métodos:
+ * - getId(): Retorna o identificador do telefone.
+ * - setId(Integer id): Define o identificador do telefone.
+ * - getCliente(): Retorna o cliente associado ao telefone.
+ * - setCliente(ClientModel cliente): Define o cliente associado ao telefone.
+ * - getTipo(): Retorna o tipo do telefone.
+ * - setTipo(String tipo): Define o tipo do telefone.
+ * - getTelefone(): Retorna o número do telefone.
+ * - setTelefone(String telefone): Define o número do telefone.
+ */
 @Entity
 @Table(name = "Telefones")
 public class PhoneModel {

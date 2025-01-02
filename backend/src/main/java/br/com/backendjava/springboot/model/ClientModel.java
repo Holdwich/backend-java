@@ -14,6 +14,26 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Classe que representa o modelo de cliente.
+ * 
+ * Atributos:
+ * - cpf: CPF do cliente (não pode ser nulo ou vazio).
+ * - nome: Nome do cliente (não pode ser nulo ou vazio, máximo de 100 caracteres).
+ * - endereco: Endereço do cliente, representado por um objeto embutido EnderecoEmbeddable.
+ * - telefones: Lista de telefones associados ao cliente.
+ * - emails: Lista de emails associados ao cliente.
+ * 
+ * Relacionamentos:
+ * - telefones: Relacionamento um-para-muitos com a entidade PhoneModel.
+ * - emails: Relacionamento um-para-muitos com a entidade EmailModel.
+ * 
+ * Métodos auxiliares:
+ * - addTelefone(PhoneModel telefone): Adiciona um telefone à lista de telefones do cliente.
+ * - removeTelefone(PhoneModel telefone): Remove um telefone da lista de telefones do cliente.
+ * - addEmail(EmailModel email): Adiciona um email à lista de emails do cliente.
+ * - removeEmail(EmailModel email): Remove um email da lista de emails do cliente.
+ */
 @Entity
 @Table(name = "Clientes")
 public class ClientModel {

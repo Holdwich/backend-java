@@ -10,6 +10,22 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+/**
+ * Classe que representa o modelo de Email.
+ * 
+ * Atributos:
+ * - id: Identificador único do email.
+ * - cliente: Referência para o cliente associado ao email.
+ * - email: Endereço de email.
+ * 
+ * Métodos:
+ * - getId: Retorna o identificador do email.
+ * - setId: Define o identificador do email.
+ * - getCliente: Retorna o cliente associado ao email.
+ * - setCliente: Define o cliente associado ao email.
+ * - getEmail: Retorna o endereço de email.
+ * - setEmail: Define o endereço de email.
+ */
 @Entity
 @Table(name = "Emails")
 public class EmailModel {

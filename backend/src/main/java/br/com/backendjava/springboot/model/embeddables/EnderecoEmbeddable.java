@@ -11,6 +11,33 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Classe que representa um endereço embutido em outra entidade.
+ * Utiliza a API ViaCEP para preencher automaticamente os campos
+ * logradouro, bairro, cidade e uf com base no CEP fornecido.
+ * 
+ * Atributos:
+ * - cep: Código de Endereçamento Postal (CEP) do endereço. (Obrigatório)
+ * - logradouro: Nome da rua, avenida, etc. (Obrigatório)
+ * - bairro: Nome do bairro. (Obrigatório)
+ * - cidade: Nome da cidade. (Obrigatório)
+ * - uf: Unidade Federativa (estado). (Obrigatório)
+ * - complemento: Complemento do endereço. (Opcional)
+ * 
+ * Métodos:
+ * - getCep(): Retorna o CEP do endereço.
+ * - setCep(): Define o CEP do endereço e preenche automaticamente os demais campos.
+ * - getLogradouro(): Retorna o logradouro do endereço.
+ * - setLogradouro(): Define o logradouro do endereço.
+ * - getBairro(): Retorna o bairro do endereço.
+ * - setBairro(): Define o bairro do endereço.
+ * - getCidade(): Retorna a cidade do endereço.
+ * - setCidade(): Define a cidade do endereço.
+ * - getUf(): Retorna a unidade federativa (estado) do endereço.
+ * - setUf(): Define a unidade federativa (estado) do endereço.
+ * - getComplemento(): Retorna o complemento do endereço.
+ * - setComplemento(): Define o complemento do endereço.
+ */
 @Embeddable
 public class EnderecoEmbeddable {
 
