@@ -23,14 +23,22 @@ public class UserController {
     @Autowired
     private JwtService jwtService;
 
-    // Rota para login (REFATORAR: DE REQUESTPARAM PARA REQUESTBODY)
     @GetMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String senha) {
+    public String login(@RequestBody ObjectNode objectNode) {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         Query query = null;
         boolean isAdmin = false;
         long count = 0;
+
+        // Extraindo os valores de username e senha do ObjectNode
+        String username = objectNode.get("username").asText();
+        String senha = objectNode.get("senha").asText();
+
+        // Checando se os valores foram passados ou não
+        if (username == null || username.trim().isEmpty() || senha == null || senha.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parâmetros insuficientes: username ou senha não podem ser vazios.");
+        }
 
         /******************************************************************************************************************
          * * OBS: Não utilizei o objeto diretamente por conta de um erro de typeCast cujo não consegui resolver a tempo * *
