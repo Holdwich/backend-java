@@ -7,6 +7,13 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 // Token personalizado
 
+/**
+ * JwtAuthenticationToken é uma classe de token personalizado e representa um token de autenticação JWT.
+ * 
+ * @param username O nome de usuário associado ao token de autenticação.
+ * @param isAdmin Um valor booleano indicando se o usuário é um administrador.
+ * @param authorities As autoridades concedidas ao usuário.
+ */
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     private final String username;

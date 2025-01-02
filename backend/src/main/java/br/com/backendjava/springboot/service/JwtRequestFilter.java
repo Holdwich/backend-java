@@ -12,6 +12,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Filtro de requisição JWT que estende OncePerRequestFilter.
+ * 
+ * Este filtro intercepta todas as requisições HTTP para verificar a presença de um token JWT no cabeçalho de autorização.
+ * Se um token válido for encontrado, ele extrai o nome de usuário e a propriedade "IsAdmin" do token e configura a autenticação no contexto de segurança.
+ * 
+ * Dependências:
+ * - JwtService: Serviço para manipulação e validação de tokens JWT.
+ * 
+ * Métodos:
+ * - doFilterInternal: Método principal que executa o filtro de requisição.
+ * 
+ * Parâmetros:
+ * - HttpServletRequest request: A requisição HTTP.
+ * - HttpServletResponse response: A resposta HTTP.
+ * - FilterChain chain: A cadeia de filtros.
+ */
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 

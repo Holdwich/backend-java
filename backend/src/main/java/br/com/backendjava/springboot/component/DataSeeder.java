@@ -9,8 +9,21 @@ import br.com.backendjava.springboot.HibernateUtil;
 import br.com.backendjava.springboot.model.UserModel;
 import br.com.backendjava.springboot.service.EncryptionService;
 
-// -- usuários iniciais (ocultar melhor em produção) --
-
+/**
+ * Classe responsável por popular o banco de dados com dados iniciais.
+ * 
+ * Esta classe é um componente Spring que utiliza Hibernate para interagir com o banco de dados.
+ * O método seed() é executado após a construção do bean e verifica se há usuários no banco de dados.
+ * Se não houver, cria um usuário administrador e um usuário cliente com senhas criptografadas.
+ * 
+ * Métodos:
+ * - seed(): Método que realiza a inserção dos dados iniciais no banco de dados.
+ * 
+ * Exceções:
+ * - Em caso de erro durante a transação, a transação é revertida e a exceção é impressa no console.
+ * 
+ * OBS: Ocultar melhor dados em produção.
+ */
 @Component
 public class DataSeeder {
 

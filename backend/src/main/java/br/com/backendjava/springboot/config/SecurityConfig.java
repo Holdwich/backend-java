@@ -11,6 +11,28 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import br.com.backendjava.springboot.service.JwtRequestFilter;
 
+/**
+ * Configuração de segurança para a aplicação Spring Boot.
+ * 
+ * Esta classe configura a segurança da aplicação utilizando JWT para autenticação.
+ * 
+ * @param jwtRequestFilter Filtro de requisição JWT que será adicionado à cadeia de filtros de segurança.
+ * 
+ * @method securityFilterChain(): Configura a cadeia de filtros de segurança.
+ * 
+ * @param http Objeto HttpSecurity usado para configurar a segurança HTTP.
+ * 
+ * @return SecurityFilterChain configurado.
+ * 
+ * Configurações:
+ * - Permite todas as requisições para endpoints que começam com "/user/**".
+ * - Requer autenticação para o endpoint "/client/get".
+ * - Requer que qualquer outra requisição seja acessada apenas por administradores.
+ * - Define a política de criação de sessão como STATELESS.
+ * - Habilita CORS.
+ * - Desabilita CSRF.
+ * - Adiciona o filtro jwtRequestFilter antes do filtro UsernamePasswordAuthenticationFilter.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig{

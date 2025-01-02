@@ -7,6 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 
+/**
+ * Serviço de criptografia utilizando o algoritmo AES.
+ * 
+ * Esta classe fornece métodos para criptografar e descriptografar dados usando uma chave simétrica.
+ * 
+ * Nota: Em produção, a chave deve ser armazenada em um arquivo .env e não embutida no código-fonte.
+ */
 @Service
 public class EncryptionService {
 
