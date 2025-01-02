@@ -25,6 +25,14 @@ public class UserController {
     @Autowired
     private JwtService jwtService;
 
+    /**
+     * Endpoint para realizar o login de um usuário.
+     *
+     * @param objectNode Objeto JSON contendo os parâmetros "username" e "senha".
+     * @return Uma string JSON contendo o token de autorização se o login for bem-sucedido, ou uma mensagem de erro se falhar.
+     * @throws ResponseStatusException Se os parâmetros "username" ou "senha" não forem fornecidos ou estiverem vazios.
+     * @throws ResponseStatusException Se ocorrer um erro interno do servidor durante a requisição.
+     */
     @PostMapping("/login")
     public String login(@RequestBody ObjectNode objectNode) {
 
